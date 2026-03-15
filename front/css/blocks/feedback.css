@@ -1,0 +1,48 @@
+.feedback {
+    padding: 58px 0 210px;
+    background-color: #131A3A;
+    min-height: 1156px;
+    background-image: url('../../assets/img/moon-contact.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-y: center;
+}
+
+.feedback__title,
+.feedback__text,
+.feedback__label {
+    color: #fff;
+}
+
+.feedback__title {
+    font-size: 36px;
+}
+
+.feedback__text {
+    font-size: 32px;
+    margin-bottom: 64px;
+}
+
+.feedback__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.feedback__input {
+    width: 724px;
+    height: 56px;
+}
+
+.feedback__block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+
+.feedback__checkbox {
+    width: 32px;
+    height: 32px;
+}

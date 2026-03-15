@@ -1,0 +1,69 @@
+.hero {
+    height: calc(100vh - 92px);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #badaff 0%, rgba(255, 255, 255, 0) 100%);
+    padding: 25px 20px 36px;
+}
+
+.hero__wrapper {
+    margin-top: 10%;
+    display: flex;
+    gap: 24px
+}
+
+.hero__left {
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 576px;
+    width: 100%;
+}
+
+.hero__wrapper-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero__title {
+    text-transform: uppercase;
+}
+
+
+.hero__wrapper-btn {
+    display: flex;
+    gap: 16px;
+}
+
+
+.hero__img::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: block;
+    background-image: url('../../assets/svg/decor-rings.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+    pointer-events: none;
+    width: 1600px;
+    height: 1600px;
+    top: -50%;
+}
+
+.hero__img {
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+}
+
+.hero__img img {
+    position: relative;
+    z-index: 2;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}

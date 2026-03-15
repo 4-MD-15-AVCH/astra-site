@@ -1,0 +1,78 @@
+.about {
+overflow: hidden;
+    background-color: var(--bg-dark);
+    /* background-image: url('../../assets/img/moon-contact.png');
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-x: 130%;
+    background-position-y: 170%; */
+}
+
+.about__wrapper {
+    padding: 88px 0px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 200px;
+    justify-content: space-between;
+}
+
+.about__wrapper::before {
+    position: absolute;
+    content: '';
+    background-image: url(../../assets/img/moon-contact.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 843px;
+    width: 787px;
+    left: 75%;
+    bottom: -30%;
+    overflow: hidden;
+}
+
+.about__title {
+    margin-bottom: 16px;
+}
+
+.about__wrapper-texts {
+    position: relative;
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+}
+
+.about__wrapper-texts::after {
+    position: absolute;
+    content: '';
+    background-image: url('../../assets/svg/icon-star.svg');
+    background-repeat: no-repeat;
+    background-position-x: left;
+    height: 70px;
+    width: 54px;
+    right: -70%
+}
+
+
+.about__wrapper-texts::before {
+    position: absolute;
+    content: '';
+    background-image: url('../../assets/svg/icon-star.svg');
+    background-repeat: no-repeat;
+    background-position-x: left;
+    height: 70px;
+    width: 54px;
+    bottom: -120px
+}
+
+.about__title, .about__text {
+    color: var(--text-light);
+}
+
+
+.about__bottom {
+    display: flex;
+    gap: 70px;
+    flex-direction: column;
+    align-items: flex-start;
+}

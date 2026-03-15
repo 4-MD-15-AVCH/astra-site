@@ -1,0 +1,17 @@
+@import 'global/variable.css';
+@import 'global/fonts.css';
+@import 'global/util.css';
+@import 'global/reset.css';
+
+
+
+@import 'blocks/header.css';
+@import 'blocks/hero.css';
+@import 'blocks/about.css';
+@import 'blocks/feature.css';
+@import 'blocks/reading.css';
+@import 'blocks/feedback.css';
+@import 'blocks/geo.css';
+@import 'blocks/footer.css';
+@import 'blocks/btn.css';
+@import 'blocks/tarot.css';
