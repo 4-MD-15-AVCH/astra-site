@@ -9,7 +9,7 @@ overflow: hidden;
 }
 
 .about__wrapper {
-    padding: 88px 0px;
+    padding: 88px 20px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,21 @@ overflow: hidden;
     overflow: hidden;
 }
 
+.about__wrapper::after {
+    position: absolute;
+    content: '';
+    background-image: url('../../assets/svg/icon-star.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 70px;
+    width: 54px;
+    left: 90%;
+    /* bottom: -30%; */
+    overflow: hidden;
+}
+
 .about__title {
+    font-weight: 400;
     margin-bottom: 16px;
 }
 
@@ -65,6 +79,23 @@ overflow: hidden;
     bottom: -120px
 }
 
+.about__title {
+    position: relative;
+}
+
+.about__title::before {
+    position: absolute;
+    content: '';
+    background-image: url('../../assets/svg/icon-star.svg');
+    background-repeat: no-repeat;
+    background-position-x: left;
+    height: 70px;
+    width: 54px;
+    bottom: -350%;
+    left: 140%;
+}
+
+
 .about__title, .about__text {
     color: var(--text-light);
 }
@@ -75,4 +106,73 @@ overflow: hidden;
     gap: 70px;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.about__text br {
+    display: none;
+}
+
+
+@media (max-width: 425px) {
+
+    .about__wrapper::before {
+        z-index: 2;
+        left: 0;
+        bottom: -75%;
+    }
+
+    .about__wrapper {
+        gap: 48px;
+    }
+
+    .about__title {
+        font-size: 64px;
+    }
+
+    .about__text {
+        font-size: 20px;
+    }
+
+    .about__btn  {
+        position: relative;
+        z-index: 3;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 15px 85px;
+    }
+
+    .about__wrapper::after {
+        height: 34px;
+        width: 24px;
+        left: 60%;
+        top: 12%;
+    }
+
+    .about__wrapper-texts::before {
+        background-size: contain;
+        height: 44px;
+        width: 34px;
+        bottom: -20%;
+        left: 90%;
+    }
+
+}
+
+@media (max-width: 320px) {
+    .about__wrapper::after {
+        left: 70%;
+        top: 13%;
+    }
+
+    .about__wrapper::before {
+        left: -30%;
+    }
+
+    .about__btn {
+        position: relative;
+        z-index: 3;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 15px 62px;
+    }
 }

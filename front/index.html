@@ -23,7 +23,7 @@
             </button>
             <ul class="header__lists" id="header-nav">
                 <li class="header__list">
-                    <a href="#" class="header__link">Главная</a>
+                    <a href="index.html" class="header__link">Главная</a>
                 </li>
                 <li class="header__list">
                     <a href="#about" class="header__link">О нас</a>
@@ -121,19 +121,59 @@
             <a href="" class="feature__btn btn btn--large">Скачать</a>
         </div>
     </section>
+    <section class="feature-mobile">
+        <h2 class="feature-mobile__title">
+            Функции
+        </h2>
+        <ul class="feature-mobile__list">
+            <li class="feature-mobile__item">
+                <svg width="54" height="70" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.1304 32.6667L0 35L21.1304 39.6667L16.4348 49L25.8261 42L28.1739 70L32.8696 42L42.2609 49L37.5652 39.6667L54 35L37.5652 32.6667L42.2609 21L32.8696 28L28.1739 0L25.8261 28L16.4348 21L21.1304 32.6667Z" fill="#FFA361"/>
+                </svg>
+                <p>
+                    Функции приложения Astra простые и&nbsp;содержат все необходимое чтобы узнать о&nbsp;себе и&nbsp;окружающих вас людях.
+                </p> 
+            </li>
+            <li class="feature-mobile__item">
+                <svg width="54" height="70" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.1304 32.6667L0 35L21.1304 39.6667L16.4348 49L25.8261 42L28.1739 70L32.8696 42L42.2609 49L37.5652 39.6667L54 35L37.5652 32.6667L42.2609 21L32.8696 28L28.1739 0L25.8261 28L16.4348 21L21.1304 32.6667Z" fill="#FFA361"/>
+                </svg>
+                <p>
+                    Узнайте о себе! Вы получите подробное и очное описание вашей личности, ваших слабых и сильных сторон. Узнайте о людях вокруг. 
+                </p>
+            </li>
+            <li class="feature-mobile__item">
+                <svg width="54" height="70" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.1304 32.6667L0 35L21.1304 39.6667L16.4348 49L25.8261 42L28.1739 70L32.8696 42L42.2609 49L37.5652 39.6667L54 35L37.5652 32.6667L42.2609 21L32.8696 28L28.1739 0L25.8261 28L16.4348 21L21.1304 32.6667Z" fill="#FFA361"/>
+                </svg>
+                <p>
+                    В&nbsp;разделе Люди Вы&nbsp;можете получить подробное описание любого человека, о&nbsp;котором хотите узнать больше, о&nbsp;своих друзьях, семье или коллегах, чтобы лучше понять&nbsp;их.
+                </p>
+            </li>
+            <li class="feature-mobile__item">
+                <svg width="54" height="70" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.1304 32.6667L0 35L21.1304 39.6667L16.4348 49L25.8261 42L28.1739 70L32.8696 42L42.2609 49L37.5652 39.6667L54 35L37.5652 32.6667L42.2609 21L32.8696 28L28.1739 0L25.8261 28L16.4348 21L21.1304 32.6667Z" fill="#FFA361"/>
+                </svg>
+                <p>
+                    Узнайте, как&nbsp;Вы подходите друг другу с&nbsp;вашим нынешним или потенциальным партнером.
+                </p>
+            </li>
+        </ul>
+        <a href="" class="feature-mobile__btn btn">Скачать</a>
+    </section>
 
-    <section class="reading">
+     <section class="reading">
         <div class="reading__wrapper container">
             <h2 class="reading__title">
                 Ваш персональный расклад
             </h2>
-            <p class="reading_text">
+            <p class="reading__text reading__text--top">
                 Введите свои данные, и&nbsp;Astra сформирует персональный расклад
                 на&nbsp;сегодня.<br>Мы&nbsp;объединяем символику Таро и&nbsp;цифровые алгоритмы, чтобы дать вам точный
                 и&nbsp;актуальный ответ
                 на&nbsp;текущий момент.
             </p>
-            <p class="reading__text">
+            <p class="reading__text reading__text--bottom">
                 Расклад поможет понять:
             </p>
             <ul class="reading__list">
@@ -166,19 +206,19 @@
                 Несколько секунд — и вы получите индивидуальное послание, созданное специально для вас.
             </p>
             <div class="reading__form-wrapper">
-                <form action="#" class="reading__form" id="tarot-form">
+                <form action="#" class="reading__form" id="tarot-form" novalidate>
                     <div class="reading__wrapper-form">
                         <div class="reading__form-name">
                             <label for="name" class="reading__form-label">Имя</label>
-                            <input class="reading__form-input" type="text" id="name" name="name" placeholder="Как к вам обращаться?" required>
+                            <input class="reading__form-input" type="text" id="name" name="name" placeholder="Как к вам обращаться?">
                         </div>
                         <div class="reading__form-name">
                             <label for="birthDate" class="reading__form-label">Дата рождения</label>
-                            <input class="reading__form-input" type="date" id="birthDate" name="birthDate" required>
+                            <input class="reading__form-input" type="date" id="birthDate" name="birthDate">
                         </div>
                         <div class="reading__form-name">
                             <label for="gender" class="reading__form-label">Пол</label>
-                            <select class="reading__form-input" id="gender" name="gender" required>
+                            <select class="reading__form-input" id="gender" name="gender">
                                 <option value="">Выберите</option>
                                 <option value="m">Мужской</option>
                                 <option value="f">Женский</option>
@@ -188,45 +228,45 @@
                     <button type="submit" id="submit-btn" class="reading__form-btn btn--large-accent btn">Получить расклад</button>
                 </form>
             </div>
-            <div id="tarot-error" class="tarot-error" style="display: none;"></div>
-            <div id="tarot-loading" class="tarot-loading" style="display: none;">Загрузка карт...</div>
-            <div class="reading__wrapper-imgs" id="tarot-cards">
-                <div class="tarot-card flipped" data-default="1" data-name="Повешенный" data-meaning="Пауза, жертва, смена взгляда. Остановка ради прозрения. В перевёрнутом: застой, бесполезная жертва.">
-                    <div class="card-flip">
-                        <div class="card-flip-inner">
-                            <div class="card-back"><span class="card-back-symbol">✦</span></div>
-                            <div class="card-front"><img src="assets/img/card1.png" alt="Повешенный" /></div>
+            <div id="tarot-error" class="reading__error" style="display: none;"></div>
+            <div id="tarot-loading" class="reading__loading" style="display: none;">Загрузка карт...</div>
+            <div class="reading__cards" id="tarot-cards">
+                <div class="reading__card is-flipped" data-default="1" data-name="Повешенный" data-meaning="Пауза, жертва, смена взгляда. Остановка ради прозрения. В перевёрнутом: застой, бесполезная жертва.">
+                    <div class="reading__card-flip">
+                        <div class="reading__card-flip-inner">
+                            <div class="reading__card-back"><span class="reading__card-back-symbol">✦</span></div>
+                            <div class="reading__card-front"><img src="assets/img/card1.png" alt="Повешенный" /></div>
                         </div>
                     </div>
-                    <div class="card-label">Прошлое</div>
-                    <div class="card-name-ru">Повешенный (XII)</div>
+                    <div class="reading__card-label">Прошлое</div>
+                    <div class="reading__card-name">Повешенный (XII)</div>
                 </div>
-                <div class="tarot-card flipped" data-default="1" data-name="Солнце" data-meaning="Радость, успех, ясность. Светлая полоса в жизни. В перевёрнутом: временные трудности.">
-                    <div class="card-flip">
-                        <div class="card-flip-inner">
-                            <div class="card-back"><span class="card-back-symbol">✦</span></div>
-                            <div class="card-front"><img src="assets/img/card2.png" alt="Солнце" /></div>
+                <div class="reading__card is-flipped" data-default="1" data-name="Солнце" data-meaning="Радость, успех, ясность. Светлая полоса в жизни. В перевёрнутом: временные трудности.">
+                    <div class="reading__card-flip">
+                        <div class="reading__card-flip-inner">
+                            <div class="reading__card-back"><span class="reading__card-back-symbol">✦</span></div>
+                            <div class="reading__card-front"><img src="assets/img/card2.png" alt="Солнце" /></div>
                         </div>
                     </div>
-                    <div class="card-label">Настоящее</div>
-                    <div class="card-name-ru">Солнце (XIX)</div>
+                    <div class="reading__card-label">Настоящее</div>
+                    <div class="reading__card-name">Солнце (XIX)</div>
                 </div>
-                <div class="tarot-card flipped" data-default="1" data-name="Дьявол" data-meaning="Зависимость, искушение, материальные путы. Осознание оков. В перевёрнутом: освобождение, преодоление.">
-                    <div class="card-flip">
-                        <div class="card-flip-inner">
-                            <div class="card-back"><span class="card-back-symbol">✦</span></div>
-                            <div class="card-front"><img src="assets/img/card3.png" alt="Дьявол" /></div>
+                <div class="reading__card is-flipped" data-default="1" data-name="Дьявол" data-meaning="Зависимость, искушение, материальные путы. Осознание оков. В перевёрнутом: освобождение, преодоление.">
+                    <div class="reading__card-flip">
+                        <div class="reading__card-flip-inner">
+                            <div class="reading__card-back"><span class="reading__card-back-symbol">✦</span></div>
+                            <div class="reading__card-front"><img src="assets/img/card3.png" alt="Дьявол" /></div>
                         </div>
                     </div>
-                    <div class="card-label">Будущее</div>
-                    <div class="card-name-ru">Дьявол (XV)</div>
+                    <div class="reading__card-label">Будущее</div>
+                    <div class="reading__card-name">Дьявол (XV)</div>
                 </div>
             </div>
-            <div class="tarot-reading-text reading__text-wrapper" id="tarot-reading-text">
-                <p class="narrative reading__text reading__text--blur" id="tarot-narrative">Введите данные и нажмите «Получить расклад» — здесь появится ваше персональное послание.</p>
+            <div class="reading__result reading__text-wrapper" id="tarot-reading-text">
+                <p class="reading__narrative reading__text reading__text--blur" id="tarot-narrative">Введите данные и нажмите «Получить расклад» — здесь появится ваше персональное послание.</p>
             </div>
         </div>
-    </section>
+    </section> 
     <section class="feedback">
         <div class="feedback__wrapper container">
             <h3 class="feedback__title">
@@ -235,27 +275,44 @@
             <p class="feedback__text">
                 Ваш личный астролог Astra может полностью заменить настоящую профессиональную астрологию.
             </p>
-            <form class="feedback__form">
+            <form class="feedback__form" id="feedback-form" novalidate>
                 <div class="feedback__left">
-                    <label for="surname" class="feedback__label">Фамилия</label>
-                    <input type="text" class="feedback__input">
-                    <label for="surname" class="feedback__label">Имя</label>
-                    <input type="text" class="feedback__input">
-                    <label for="surname" class="feedback__label">Отчество</label>
-                    <input type="text" class="feedback__input">
-                    <label for="surname" class="feedback__label">Почта</label>
-                    <input type="text" class="feedback__input">
-                    <label for="surname" class="feedback__label">Телефон</label>
-                    <input type="text" class="feedback__input">
+                    <label for="feedback-surname" class="feedback__label">Фамилия</label>
+                    <input type="text" class="feedback__input" id="feedback-surname" name="surname">
+                    <p class="feedback__field-error" data-field="surname"></p>
+                    <label for="feedback-name" class="feedback__label">Имя</label>
+                    <input type="text" class="feedback__input" id="feedback-name" name="name">
+                    <p class="feedback__field-error" data-field="name"></p>
+                    <label for="feedback-patronymic" class="feedback__label">Отчество</label>
+                    <input type="text" class="feedback__input" id="feedback-patronymic" name="patronymic">
+                    <p class="feedback__field-error" data-field="patronymic"></p>
+                    <label for="feedback-email" class="feedback__label">Почта</label>
+                    <input type="email" class="feedback__input" id="feedback-email" name="email">
+                    <p class="feedback__field-error" data-field="email"></p>
+                    <label for="feedback-phone" class="feedback__label">Телефон</label>
+                    <input type="tel" class="feedback__input" id="feedback-phone" name="phone">
+                    <p class="feedback__field-error" data-field="phone"></p>
                     <div class="feedback__block">
-                        <input type="checkbox" name="" id="" class="feedback__checkbox">
-                        <label for="" class="feedback__label">Я согласен с Обработкой персональных данных</label>
+                        <input type="checkbox" name="consent" id="consent" class="feedback__checkbox">
+                        <label for="consent" class="feedback__label">Я согласен с Обработкой персональных данных</label>
+                        <p class="feedback__field-error feedback__field-error--consent" data-field="consent"></p>
                     </div>
                 </div>
-
+                <div class="feedback__right">
+                    <label class = "feedback__label" for ="feedback-message" >
+                        Вопрос
+                    </label>
+                    <textarea class="feedback__textarea" id="feedback-message" name="question"></textarea>
+                    <p class="feedback__field-error" data-field="question"></p>
+                    <button class="feedback_btn btn btn--large-accent" id="feedback-submit" type="submit">
+                        Отправить
+                    </button>
+                    <p class="feedback__status" id="feedback-error" style="display: none;"></p>
+                    <p class="feedback__status" id="feedback-success" style="display: none;"></p>
+                </div>
             </form>
         </div>
-    </section>
+    </section> 
     <section class="geo">
         <div class="geo__wrapper container">
             <div class="geo__wrapper-text">
@@ -272,10 +329,12 @@
             </div>
             <div id="geo__map" class="geo__map"></div>
             <p class="geo__text geo__text--bottom">
-                Ваш личный астролог Astra может полностью заменить настоящую профессиональную астрологию.
+                Ваш личный астролог Astra может полностью<br>
+                заменить настоящую профессиональную<br>
+                астрологию.
             </p>
         </div>
-    </section>
+    </section> 
     <footer class="footer">
         <div class="footer__wrapper container">
             <h3 class="footer__title">
@@ -292,11 +351,15 @@
                 <div class="footer__right">
                     <p class="footer__mail">
                         Наша почта: <br>
-                        info@astra.ru
+                        <a href="" class="footer__links">
+                            info@astra.ru
+                        </a>
                     </p>
                     <p class="footer__mail">
                         Телефон: <br>
-                        +7812112233
+                        <a href="" class="footer__links">
+                            +7812112233
+                        </a>
                     </p>
                     <p class="footer__mail">
                         Юр.адрес: Россия, 191186, Санкт-Петербург, <br>
@@ -313,17 +376,25 @@
                 </p>
             </div>
         </div>
-    </footer>
+    </footer> 
 
-
-    <div class="tarot-modal" id="tarot-modal" aria-hidden="true">
-        <div class="tarot-modal-inner">
-            <button type="button" class="tarot-modal-close" id="modal-close" aria-label="Закрыть">&times;</button>
+ 
+    <div class="reading__modal" id="tarot-modal" aria-hidden="true">
+        <div class="reading__modal-inner">
+            <button type="button" class="reading__modal-close" id="modal-close" aria-label="Закрыть">&times;</button>
             <img id="modal-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
-            <div id="modal-placeholder" class="card-img-placeholder" style="display: none; margin-bottom: 16px;" aria-hidden="true"></div>
+            <div id="modal-placeholder" class="reading__card-placeholder reading__modal-placeholder" style="display: none; margin-bottom: 16px;" aria-hidden="true"></div>
             <h3 id="modal-title"></h3>
-            <p class="meaning" id="modal-meaning"></p>
+            <p class="reading__modal-meaning" id="modal-meaning"></p>
         </div>
+    </div>
+    <div class="feedback-toast" id="feedback-toast" role="status" aria-live="polite" aria-hidden="true">
+        <div class="feedback-toast__icon" aria-hidden="true">✓</div>
+        <div class="feedback-toast__content">
+            <p class="feedback-toast__title">Успешно</p>
+            <p class="feedback-toast__text" id="feedback-toast-text">Форма отправлена</p>
+        </div>
+        <button type="button" class="feedback-toast__close" id="feedback-toast-close" aria-label="Закрыть уведомление">&times;</button>
     </div>
 
     <script src="js/index.js" type="module"></script>

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://localhost:3002';
 const POSITIONS = ['Прошлое', 'Настоящее', 'Будущее'];
 const PLACEHOLDER_SRCS = ['assets/img/card1.png', 'assets/img/card2.png', 'assets/img/card3.png'];
 
@@ -13,6 +13,7 @@ const modalClose = document.getElementById('modal-close');
 const modalImg = document.getElementById('modal-img');
 const modalTitle = document.getElementById('modal-title');
 const modalMeaning = document.getElementById('modal-meaning');
+const FIELD_ERROR_CLASS = 'reading__field-error';
 
 let typewriterTimer = null;
 
@@ -27,18 +28,75 @@ const hideError = () => {
   if (errorEl) errorEl.style.display = 'none';
 };
 
+const isValidName = (value) => {
+  const normalized = (value || '').trim();
+  return /^[A-Za-zА-Яа-яЁё\s-]{2,50}$/.test(normalized);
+};
+
+const isValidBirthDate = (value) => {
+  if (!value) return false;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return false;
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (date > today) return false;
+
+  const minDate = new Date(today);
+  minDate.setFullYear(minDate.getFullYear() - 120);
+  return date >= minDate;
+};
+
+const validateTarotForm = ({ name, birthDate, gender }) => {
+  const errors = {};
+  if (!name) errors.name = 'Введите имя.';
+  else if (!isValidName(name)) errors.name = 'Имя должно содержать 2-50 букв (допустимы пробел и дефис).';
+
+  if (!birthDate) errors.birthDate = 'Выберите дату рождения.';
+  else if (!isValidBirthDate(birthDate)) errors.birthDate = 'Укажите корректную дату рождения.';
+
+  if (!gender) errors.gender = 'Выберите пол.';
+  return errors;
+};
+
+const getFieldErrorElement = (field) => {
+  if (!field) return null;
+  const next = field.nextElementSibling;
+  if (next && next.classList.contains(FIELD_ERROR_CLASS)) return next;
+  const el = document.createElement('p');
+  el.className = FIELD_ERROR_CLASS;
+  field.insertAdjacentElement('afterend', el);
+  return el;
+};
+
+const showFieldError = (fieldId, message) => {
+  const field = document.getElementById(fieldId);
+  const error = getFieldErrorElement(field);
+  if (!error) return;
+  error.textContent = message;
+  error.style.display = 'block';
+};
+
+const clearFieldErrors = () => {
+  if (!form) return;
+  form.querySelectorAll(`.${FIELD_ERROR_CLASS}`).forEach((el) => {
+    el.textContent = '';
+    el.style.display = 'none';
+  });
+};
+
 const renderCards = (cards, animate) => {
   if (!cardsEl) return;
-  if (animate && cardsEl.querySelectorAll('.tarot-card').length > 0) {
+  if (animate && cardsEl.querySelectorAll('.reading__card').length > 0) {
     cardsEl.classList.add('is-animating');
     setTimeout(() => {
       injectCards(cards);
       cardsEl.classList.remove('is-animating');
       cardsEl.classList.add('is-entering');
-      cardsEl.querySelectorAll('.tarot-card').forEach((el) => el.classList.add('tarot-card-in'));
+      cardsEl.querySelectorAll('.reading__card').forEach((el) => el.classList.add('is-in'));
       setTimeout(() => {
         cardsEl.classList.remove('is-entering');
-        cardsEl.querySelectorAll('.tarot-card').forEach((el) => el.classList.add('flipped'));
+        cardsEl.querySelectorAll('.reading__card').forEach((el) => el.classList.add('is-flipped'));
       }, 1800);
     }, 420);
   } else {
@@ -55,13 +113,13 @@ const injectCards = (cards) => {
     const imgSrc = card.imageUrl || PLACEHOLDER_SRCS[i % 3];
 
     const back = document.createElement('div');
-    back.className = 'card-back';
-    back.innerHTML = '<span class="card-back-symbol">✦</span>';
+    back.className = 'reading__card-back';
+    back.innerHTML = '<span class="reading__card-back-symbol">✦</span>';
 
     const front = document.createElement('div');
-    front.className = 'card-front';
+    front.className = 'reading__card-front';
     const placeholder = document.createElement('div');
-    placeholder.className = 'card-img-placeholder';
+    placeholder.className = 'reading__card-placeholder';
     placeholder.textContent = nameRu;
 
     const img = document.createElement('img');
@@ -75,26 +133,29 @@ const injectCards = (cards) => {
     front.append(img, placeholder);
 
     const inner = document.createElement('div');
-    inner.className = 'card-flip-inner';
+    inner.className = 'reading__card-flip-inner';
     inner.append(back, front);
 
     const flipWrap = document.createElement('div');
-    flipWrap.className = 'card-flip';
+    flipWrap.className = 'reading__card-flip';
     flipWrap.appendChild(inner);
 
     const labelEl = document.createElement('div');
-    labelEl.className = 'card-label';
+    labelEl.className = 'reading__card-label';
     labelEl.textContent = POSITIONS[i];
 
     const nameEl = document.createElement('div');
-    nameEl.className = 'card-name-ru';
+    nameEl.className = 'reading__card-name';
     nameEl.textContent = nameRu;
 
     const div = document.createElement('div');
-    div.className = 'tarot-card';
+    div.className = 'reading__card';
     div.dataset.index = i;
     div.append(flipWrap, labelEl, nameEl);
-    div.addEventListener('click', () => openModal(card, nameRu, img, placeholder));
+    div.addEventListener('click', () => {
+      if (!cardsEl.classList.contains('is-revealed')) return;
+      openModal(card, nameRu, img, placeholder);
+    });
 
     cardsEl.appendChild(div);
   });
@@ -137,7 +198,7 @@ const renderReadingText = (narrative) => {
   if (!p) return;
 
   const text = narrative || '';
-  p.innerHTML = '<span id="typewriter-text"></span><span class="narrative-typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span>';
+  p.innerHTML = '<span id="typewriter-text"></span><span class="reading__typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span>';
 
   const span = document.getElementById('typewriter-text');
   const cursor = document.getElementById('typewriter-cursor');
@@ -164,9 +225,10 @@ const initTarot = () => {
   if (!form || !cardsEl) return;
 
   cardsEl.addEventListener('click', (e) => {
-    const card = e.target.closest('.tarot-card[data-default="1"]');
+    const card = e.target.closest('.reading__card[data-default="1"]');
     if (!card) return;
-    const img = card.querySelector('.card-front img');
+    if (!cardsEl.classList.contains('is-revealed')) return;
+    const img = card.querySelector('.reading__card-front img');
     if (!img) return;
     modalImg.src = img.src;
     modalImg.alt = card.dataset.name;
@@ -182,12 +244,20 @@ const initTarot = () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideError();
+    clearFieldErrors();
     submitBtn.disabled = true;
     loadingEl.style.display = 'block';
 
     const name = document.getElementById('name')?.value.trim() ?? '';
     const birthDate = document.getElementById('birthDate')?.value ?? '';
     const gender = document.getElementById('gender')?.value ?? '';
+    const validationErrors = validateTarotForm({ name, birthDate, gender });
+    if (Object.keys(validationErrors).length > 0) {
+      Object.entries(validationErrors).forEach(([field, message]) => showFieldError(field, message));
+      submitBtn.disabled = false;
+      loadingEl.style.display = 'none';
+      return;
+    }
 
     try {
       const res = await fetch(`${API_URL}/api/reading`, {
@@ -215,6 +285,7 @@ const initTarot = () => {
 
       renderCards(data.cards, true);
       renderReadingText(narrative);
+      cardsEl.classList.add('is-revealed');
       if (readingTextEl) readingTextEl.classList.add('is-revealed');
     } catch (err) {
       showError('Не удалось подключиться к серверу. Запустите: cd backend && node server.js');
@@ -232,6 +303,16 @@ const initTarot = () => {
   }
   document.addEventListener('keydown', (ev) => {
     if (ev.key === 'Escape') closeModal();
+  });
+
+  ['name', 'birthDate', 'gender'].forEach((fieldId) => {
+    const field = document.getElementById(fieldId);
+    const hideFieldError = () => {
+      const error = getFieldErrorElement(field);
+      if (error) error.style.display = 'none';
+    };
+    field?.addEventListener('input', hideFieldError);
+    field?.addEventListener('change', hideFieldError);
   });
 };
 
