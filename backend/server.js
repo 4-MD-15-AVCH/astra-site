@@ -2,9 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
+const { createClient } = require('@supabase/supabase-js');
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
+const FEEDBACK_TABLE = process.env.FEEDBACK_TABLE || 'feedback_requests';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = supabaseUrl && supabaseServiceRoleKey
+  ? createClient(supabaseUrl, supabaseServiceRoleKey)
+  : null;
 
 app.use(cors());
 app.use(express.json());
@@ -19,12 +29,24 @@ const MEANINGS_RU_MAJOR = (() => {
 const SUIT_RU = { wands: 'Жезлов', cups: 'Кубков', swords: 'Мечей', pentacles: 'Пентаклей' };
 const VALUE_RU = { ace: 'Туз', two: 'Двойка', three: 'Тройка', four: 'Четвёрка', five: 'Пятёрка', six: 'Шестёрка', seven: 'Семёрка', eight: 'Восьмёрка', nine: 'Девятка', ten: 'Десятка', page: 'Паж', knight: 'Рыцарь', queen: 'Королева', king: 'Король' };
 
+function firstSentence(str) {
+  if (!str || typeof str !== 'string') return '';
+  const end = str.search(/[.!?]\s/);
+  return (end > 0 ? str.slice(0, end + 1) : str.slice(0, 100)).trim();
+}
+
 function getMeaningRu(card) {
   const m = MEANINGS_RU_MAJOR[card.name_short];
   if (m) return { nameRu: m.nameRu, meaningRu: m.meaningRu };
   if (card.suit && card.value) {
     const nameRu = (VALUE_RU[card.value] || card.value) + ' ' + (SUIT_RU[card.suit] || card.suit);
-    return { nameRu, meaningRu: 'Толкование карты зависит от контекста расклада и положения в нём.' };
+    const up = firstSentence(card.meaning_up || '');
+    const rev = firstSentence(card.meaning_rev || '');
+    const lines = [];
+    if (up) lines.push(`Прямое положение (классика Waite): ${up}`);
+    if (rev) lines.push(`Перевёрнутое: ${rev}`);
+    lines.push('В раскладе значение уточняется соседними картами, вопросом и позицией.');
+    return { nameRu, meaningRu: lines.join('\n\n') };
   }
   return { nameRu: card.name, meaningRu: 'Толкование по контексту расклада.' };
 }
@@ -36,8 +58,12 @@ function getImageUrl(card) {
   if (card.type === 'major') {
     return `${IMG_BASE}/${card.name_short}.jpg`;
   }
+  /* Младшие: на sacred-texts имена файлов = name_short (waac, wapa, cu02), а не suit+value_int (ошибочно давало wa11 вместо wapa). */
+  if (card.type === 'minor' && card.name_short) {
+    return `${IMG_BASE}/${card.name_short}.jpg`;
+  }
   const suitCode = SUIT_CODE[card.suit] || 'wa';
-  const num = String(card.value_int).padStart(2, '0');
+  const num = String(card.value_int ?? 0).padStart(2, '0');
   return `${IMG_BASE}/${suitCode}${num}.jpg`;
 }
 
@@ -88,12 +114,6 @@ function shuffle(arr, seed) {
   return a;
 }
 
-function firstSentence(str) {
-  if (!str || typeof str !== 'string') return '';
-  const end = str.search(/[.!?]\s/);
-  return (end > 0 ? str.slice(0, end + 1) : str.slice(0, 100)).trim();
-}
-
 function buildNarrative(cards) {
   if (!cards || cards.length < 3) return '';
   const names = cards.map((c) => c.name_ru || c.name);
@@ -110,6 +130,29 @@ function buildNarrative(cards) {
     cap(s2) + ' Внутренние сомнения могут замедлять решение, однако ' + s3 + ' ' +
     'Доверьтесь себе и не избегайте выбора: сегодняшний шаг может запустить важный поворот в вашу пользу.';
   return intro + flow;
+}
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isValidPhone(value) {
+  return /^\+7 \(\d{3}\) \d{3} - \d{2} - \d{2}$/.test(value);
+}
+
+function isMissingColumnError(error, columnName) {
+  if (!error || error.code !== 'PGRST204') return false;
+  return typeof error.message === 'string' && error.message.includes(`'${columnName}' column`);
+}
+
+function getMissingColumnName(error) {
+  if (!error || error.code !== 'PGRST204' || typeof error.message !== 'string') return '';
+  const match = error.message.match(/'([^']+)' column/);
+  return match ? match[1] : '';
 }
 
 app.get('/api/health', (_, res) => {
@@ -150,15 +193,95 @@ app.post('/api/reading', (req, res) => {
   }
 });
 
-app.get('/api/cards', (_, res) => {
+app.post('/api/feedback', async (req, res) => {
   try {
-    const cards = loadCards();
-    res.json({ cards });
+    const {
+      surname = '',
+      name = '',
+      patronymic = '',
+      email = '',
+      phone = '',
+      question = '',
+      consent = false,
+    } = req.body || {};
+
+    const payload = {
+      surname: String(surname).trim(),
+      name: String(name).trim(),
+      patronymic: String(patronymic).trim(),
+      email: String(email).trim(),
+      phone: String(phone).trim(),
+      question: String(question).trim(),
+      consent: Boolean(consent),
+    };
+
+    const requiredStringFields = [
+      payload.surname,
+      payload.name,
+      payload.patronymic,
+      payload.email,
+      payload.phone,
+      payload.question,
+    ];
+    const hasEmptyField = requiredStringFields.some((value) => !isNonEmptyString(value));
+    if (hasEmptyField || !payload.consent) {
+      return res.status(400).json({ error: 'Все поля обязательны, согласие должно быть подтверждено.' });
+    }
+    if (!isValidEmail(payload.email)) {
+      return res.status(400).json({ error: 'Некорректный email.' });
+    }
+    if (!isValidPhone(payload.phone)) {
+      return res.status(400).json({ error: 'Некорректный телефон.' });
+    }
+
+    if (!supabase) {
+      return res.status(500).json({ error: 'Supabase не настроен на сервере.' });
+    }
+
+    const insertPayload = {
+      surname: payload.surname,
+      name: payload.name,
+      patronymic: payload.patronymic,
+      email: payload.email,
+      phone: payload.phone,
+      question: payload.question,
+      message: payload.question,
+      consent: payload.consent,
+    };
+
+    let error = null;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      ({ error } = await supabase.from(FEEDBACK_TABLE).insert([insertPayload]));
+      if (!error) break;
+      const missingColumn = getMissingColumnName(error);
+      if (!missingColumn || !(missingColumn in insertPayload)) break;
+      delete insertPayload[missingColumn];
+    }
+
+    if (error) {
+      console.error(error);
+      if (error.code === 'PGRST205') {
+        return res.status(500).json({
+          error: `Таблица '${FEEDBACK_TABLE}' не найдена. Создайте её через backend/sql/create_feedback_requests.sql или укажите FEEDBACK_TABLE в .env.`,
+        });
+      }
+      if (isMissingColumnError(error, 'consent')) {
+        return res.status(500).json({ error: 'В таблице нет поля consent. Добавьте колонку или измените схему формы.' });
+      }
+      return res.status(500).json({ error: 'Ошибка сохранения данных.' });
+    }
+
+    return res.status(201).json({ ok: true });
   } catch (e) {
-    res.status(500).json({ error: 'Ошибка загрузки карт' });
+    console.error(e);
+    return res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Tarot API (local): http://localhost:${PORT}`);
+/* Сайт с того же порта, что и API — без CORS и без блокировок file:// */
+const siteRoot = path.join(__dirname, '..');
+app.use(express.static(siteRoot));
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Сайт + API: http://127.0.0.1:${PORT}/  (откройте в браузере этот адрес)`);
 });
