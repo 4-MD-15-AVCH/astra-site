@@ -1,0 +1,212 @@
+.hero {
+    position: relative;
+    background: linear-gradient(180deg, #badaff 0%, rgba(255, 255, 255, 0) 100%);
+    padding: 25px 20px 112px;
+    overflow: hidden;
+}
+
+.hero__wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px
+}
+
+.hero__left {
+    position: relative;
+    z-index: 3;
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 576px;
+    width: 100%;
+}
+
+.hero__wrapper-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero__title {
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+.hero__text {
+    font-weight: 300;
+    font-size: 36px;
+}
+
+.hero__wrapper-btn {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    gap: 16px;
+}
+
+.hero__accent {
+    font-weight: 700;
+}
+
+
+.hero__img::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: block;
+    background-image: url('../../assets/svg/decor-rings.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+    pointer-events: none;
+    width: 1300px;
+    height: 1300px;
+    top: -50%;
+    left: -75%;
+}
+
+.hero__img {
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+}
+
+.hero__img img {
+    position: relative;
+    z-index: 2;
+    display: block;
+    max-width: 100%;
+}
+
+.hero__btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 1440px) {
+    .hero__img::before {
+        width: 1000px;
+        height: 1200px;
+        top: -50%;
+        left: -40%;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .hero__btn {
+        padding: 20px 32px;
+    }
+
+    .hero__img::before {
+        width: 800px;
+        height: 800px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .hero__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 24px
+    }
+
+    .hero__left {
+        margin-top: 100px;
+    }
+
+    .hero__title {
+        font-size: 80px;
+    }
+
+    .hero__text {
+        margin-bottom: 58px;
+    }
+
+    .hero__btn {
+        padding: 20px 40px;
+        font-size: 16px;
+    }
+
+    .hero__wrapper-btn {
+        display: flex;
+        gap: 16px;
+        position: relative;
+        z-index: 3;
+
+    }
+
+    .hero__img::before {
+        width: 900px;
+        height: 890px;
+        top: -75%;
+        left: 20%;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .hero__wrapper-btn {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+@media (max-width: 425px) {
+
+    .hero__wrapper-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .hero__wrapper {
+        margin: 0;
+    }
+
+    .hero__left {
+        margin-top: 56px;
+    }
+
+    .hero__wrapper-btn {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero__btn {
+        font-size: 16px;
+    }
+
+    .hero__img::before {
+        top: -100%;
+        left: 0;
+    }
+
+    .hero__title {
+        font-size: 64px;
+    }
+
+    .hero__text {
+        font-size: 20px;
+    }
+
+}
+
+@media (max-width: 375px) {
+    .hero__img::before {
+        top: -100%;
+        left: -65%;
+    }
+}
+
+@media (max-width: 320px) {
+    .hero__img::before {
+        top: -125%;
+        left: -65%;
+    }
+}

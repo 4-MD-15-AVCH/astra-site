@@ -1,0 +1,109 @@
+.footer {
+    padding: 50px 20px 64px;
+    position: relative;
+    background: linear-gradient(0deg, #deedff 0%, #fff 100%);
+    overflow: hidden;
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        display: block;
+        background-image: url('../../assets/svg/footer-orbits.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right center;
+        pointer-events: none;
+        width: 1200px;
+        height: 850px;
+        top: -40%;
+        left: 60%;
+    }
+}
+
+.footer__title {
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.footer__wrapper-text {
+    display: flex;
+    gap: 150px;
+    margin-bottom: 100px;
+}
+
+
+.footer__left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer__links {
+    font-weight: 600;
+}
+
+.footer__right {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+
+.footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 3;
+}
+
+
+@media (max-width: 480px) {
+
+    .footer {
+        overflow: hidden;
+        padding: 48px 18px 32px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            display: block;
+            background-image: url('../../assets/svg/footer-orbits.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right center;
+            pointer-events: none;
+            width: 480px;
+            height: 350px;
+            left: 35%;
+            top: 4%;
+        }
+    }
+
+    .footer__title {
+        font-size: 64px;
+    }
+
+    .footer__wrapper-text {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 60px;
+        gap: 24px;
+    }
+
+    .footer__right {
+        display: flex;
+        gap: 16px;
+    }
+
+    .footer__link,
+    .footer__mail,
+    .footer__date,
+    .footer__copy {
+        font-size: 16px;
+    }
+
+}
