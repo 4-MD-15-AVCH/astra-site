@@ -1,10 +1,5 @@
-const API_URL = 'http://localhost:3002';
+import { API_BASE_URL } from './api-config.js';
 
-const form = document.getElementById('feedback-form');
-const submitBtn = document.getElementById('feedback-submit');
-const errorEl = document.getElementById('feedback-error');
-const successEl = document.getElementById('feedback-success');
-const phoneField = form?.elements.phone ?? null;
 const toastEl = document.getElementById('feedback-toast');
 const toastTextEl = document.getElementById('feedback-toast-text');
 const toastCloseEl = document.getElementById('feedback-toast-close');
@@ -13,14 +8,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+7 \(\d{3}\) \d{3} - \d{2} - \d{2}$/;
 let toastTimer = null;
 
-const showError = (message) => {
+const showError = (errorEl, successEl, message) => {
   if (!errorEl) return;
   errorEl.textContent = message;
   errorEl.style.display = 'block';
   if (successEl) successEl.style.display = 'none';
 };
 
-const showSuccess = (message) => {
+const showSuccess = (errorEl, successEl, message) => {
   if (successEl) {
     successEl.textContent = message;
     successEl.style.display = 'none';
@@ -37,19 +32,20 @@ const showSuccess = (message) => {
   }, 3500);
 };
 
-const clearMessages = () => {
+const clearMessages = (errorEl, successEl) => {
   if (errorEl) errorEl.style.display = 'none';
   if (successEl) successEl.style.display = 'none';
 };
 
 const INLINE_ERROR_CLASS = 'feedback__field-error';
 
-const getFieldElement = (fieldName) => form?.elements[fieldName] ?? null;
-const getErrorElement = (fieldName) => form?.querySelector(`.${INLINE_ERROR_CLASS}[data-field="${fieldName}"]`) ?? null;
+const getFieldElement = (targetForm, fieldName) => targetForm?.elements[fieldName] ?? null;
+const getErrorElement = (targetForm, fieldName) =>
+  targetForm?.querySelector(`.${INLINE_ERROR_CLASS}[data-field="${fieldName}"]`) ?? null;
 
-const showFieldError = (fieldName, message) => {
-  const field = getFieldElement(fieldName);
-  const error = getErrorElement(fieldName);
+const showFieldError = (targetForm, fieldName, message) => {
+  const field = getFieldElement(targetForm, fieldName);
+  const error = getErrorElement(targetForm, fieldName);
   if (!field) return;
   if (!error) return;
   error.textContent = message;
@@ -57,11 +53,11 @@ const showFieldError = (fieldName, message) => {
   field.classList.add('is-invalid');
 };
 
-const clearFieldErrors = () => {
-  if (!form) return;
-  const invalidFields = form.querySelectorAll('.is-invalid');
+const clearFieldErrors = (targetForm) => {
+  if (!targetForm) return;
+  const invalidFields = targetForm.querySelectorAll('.is-invalid');
   invalidFields.forEach((field) => field.classList.remove('is-invalid'));
-  const errors = form.querySelectorAll(`.${INLINE_ERROR_CLASS}`);
+  const errors = targetForm.querySelectorAll(`.${INLINE_ERROR_CLASS}`);
   errors.forEach((el) => {
     el.textContent = '';
     el.classList.remove('is-visible');
@@ -122,78 +118,94 @@ const collectPayload = (targetForm) => ({
 });
 
 const initFeedback = () => {
-  if (!form) return;
+  const forms = document.querySelectorAll('.feedback__form');
+  if (!forms.length) return;
 
-  if (phoneField) {
-    phoneField.placeholder = '+7 (999) 999 - 99 - 99';
-    phoneField.maxLength = 22;
-    phoneField.addEventListener('focus', () => {
-      if (!phoneField.value) {
-        phoneField.value = '+7 (';
-      }
-    });
-    phoneField.addEventListener('input', () => {
-      phoneField.value = formatPhone(phoneField.value);
-    });
-    phoneField.addEventListener('blur', () => {
-      if (phoneField.value === '+7 (') {
-        phoneField.value = '';
-      }
-    });
-  }
+  forms.forEach((form) => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const errorEl = form.querySelector('.feedback__status--error');
+    const successEl = form.querySelector('.feedback__status--success');
+    const phoneField = form.elements.phone ?? null;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearMessages();
-    clearFieldErrors();
-
-    const payload = collectPayload(form);
-    const validationErrors = validateFormData(payload);
-    if (Object.keys(validationErrors).length > 0) {
-      Object.entries(validationErrors).forEach(([field, message]) => {
-        showFieldError(field, message);
+    if (phoneField) {
+      phoneField.placeholder = '+7 (999) 999 - 99 - 99';
+      phoneField.maxLength = 22;
+      phoneField.addEventListener('focus', () => {
+        if (!phoneField.value) {
+          phoneField.value = '+7 (';
+        }
       });
-      if (errorEl) errorEl.style.display = 'none';
-      return;
+      phoneField.addEventListener('input', () => {
+        phoneField.value = formatPhone(phoneField.value);
+      });
+      phoneField.addEventListener('blur', () => {
+        if (phoneField.value === '+7 (') {
+          phoneField.value = '';
+        }
+      });
     }
 
-    if (submitBtn) submitBtn.disabled = true;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages(errorEl, successEl);
+      clearFieldErrors(form);
 
-    try {
-      const res = await fetch(`${API_URL}/api/feedback`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        showError(data.error || 'Не удалось отправить форму. Попробуйте позже.');
+      const payload = collectPayload(form);
+      const validationErrors = validateFormData(payload);
+      if (Object.keys(validationErrors).length > 0) {
+        Object.entries(validationErrors).forEach(([field, message]) => {
+          showFieldError(form, field, message);
+        });
+        if (errorEl) errorEl.style.display = 'none';
         return;
       }
 
-      form.reset();
-      if (phoneField) {
-        phoneField.value = '';
-      }
-      showSuccess('Спасибо! Ваше сообщение отправлено.');
-    } catch (_) {
-      showError('Сервер недоступен. Проверьте, что backend запущен.');
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-    }
-  });
+      if (submitBtn) submitBtn.disabled = true;
 
-  ['surname', 'name', 'patronymic', 'email', 'phone', 'question', 'consent'].forEach((fieldName) => {
-    const field = getFieldElement(fieldName);
-    const error = getErrorElement(fieldName);
-    field?.addEventListener('input', () => {
-      if (error) error.classList.remove('is-visible');
-      field.classList.remove('is-invalid');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          showError(errorEl, successEl, data.error || 'Не удалось отправить форму. Попробуйте позже.');
+          return;
+        }
+
+        form.reset();
+        if (phoneField) {
+          phoneField.value = '';
+        }
+        showSuccess(errorEl, successEl, 'Спасибо! Ваше сообщение отправлено.');
+      } catch (_) {
+        const hint =
+          typeof window !== 'undefined' && window.location.protocol === 'https:'
+            ? ' Сайт по HTTPS не может обратиться к http:// API — HTTPS у бэкенда, прокси /api или смените API_BASE_URL в js/api-config.js.'
+            : ' Убедитесь, что backend слушает порт 3002; при открытии сайта с другого устройства в meta укажите http://ВАШ_IP:3002.';
+        showError(
+          errorEl,
+          successEl,
+          `Сервер недоступен.${hint}`,
+        );
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
-    field?.addEventListener('change', () => {
-      if (error) error.classList.remove('is-visible');
-      field.classList.remove('is-invalid');
+
+    ['surname', 'name', 'patronymic', 'email', 'phone', 'question', 'consent'].forEach((fieldName) => {
+      const field = getFieldElement(form, fieldName);
+      const error = getErrorElement(form, fieldName);
+      field?.addEventListener('input', () => {
+        if (error) error.classList.remove('is-visible');
+        field.classList.remove('is-invalid');
+      });
+      field?.addEventListener('change', () => {
+        if (error) error.classList.remove('is-visible');
+        field.classList.remove('is-invalid');
+      });
     });
   });
 

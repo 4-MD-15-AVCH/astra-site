@@ -7,6 +7,9 @@
 .reading__title {
     font-size: 96px;
     margin-bottom: 27px;
+    opacity: 0;
+    transform: translateY(20px);
+    font-weight: 400;
 }
 
 
@@ -18,10 +21,19 @@
 
 .reading__text--top {
     margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(18px);
 }
 
 .reading__text--bottom {
   margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reading__text:not(.reading__text--top):not(.reading__text--bottom) {
+  opacity: 0;
+  transform: translateY(18px);
 }
 
 .reading__text,
@@ -31,6 +43,8 @@
 
 .reading__list {
     margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(18px);
 }
 
 .reading__form {
@@ -38,7 +52,7 @@
     flex-wrap: wrap;
     column-gap: 50px;
     row-gap: 24px;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .reading__form-wrapper {
@@ -47,6 +61,8 @@
     background-color: var(--bg-dark);
     border-radius: var(--radius-lg);
     gap: 27px;
+    opacity: 0;
+    transform: translateY(24px);
 }
 
 .reading__wrapper-form {
@@ -74,7 +90,30 @@
     padding: 14px;
     border: none;
     font-size: 20px;
+    box-sizing: border-box;
+    min-height: 56px;
+    line-height: 1.2;
+    color: var(--text-body, #2f385e);
+    background-color: #fff;
 } 
+
+.reading__form-input:focus-visible {
+  outline: 2px solid var(--accent, #ffa361);
+  outline-offset: 2px;
+}
+
+#birthDate.reading__form-input {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+#birthDate.reading__form-input::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+#birthDate.reading__form-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
 
 #gender.reading__form-input {
   appearance: none;
@@ -98,7 +137,7 @@
     margin-bottom: 102px;
 }
 
-/* === Таро / расклад (БЭМ: reading) === */
+
 .reading__error {
   color: #c00;
   padding: 12px;
@@ -119,10 +158,13 @@
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 24px;
+  margin-bottom: 24px;
   perspective: 1200px;
+  opacity: 0;
+  transform: translateY(22px);
 }
 
-/* До получения расклада карточки не кликабельны */
+/* �� ��������� �������� �������� �� ����������� */
 .reading__cards:not(.is-revealed) .reading__card {
   pointer-events: none;
   cursor: default;
@@ -176,7 +218,7 @@
   .reading__form {
     flex-direction: column;
     align-items: stretch;
-    gap: 18px;
+    gap: 32px;
   }
 
   .reading__form-name {
@@ -195,6 +237,13 @@
 
   .reading__cards {
     gap: 32px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .reading__card {
+    width: calc((100% - 64px) / 3);
+    flex-shrink: 0;
   }
 }
 
@@ -202,10 +251,6 @@
   .reading__text,
   .reading__item {
     font-size: 24px;
-  }
-
-  .reading__form {
-    gap: 12px;
   }
 
   .reading__cards {
@@ -218,7 +263,6 @@
   }
 }
 
-/* 3 карточки в ряд на мобилке */
 @media (max-width: 768px) {
   .reading__cards {
     flex-wrap: nowrap;
@@ -234,17 +278,42 @@
 
 @media (max-width: 480px) {
   .reading {
-    padding: 80px 14px;
+    padding: 48px 20px;
   }
 
   .reading__title {
-    font-size: 42px;
+    font-size: 40px;
+    margin-bottom: 32px
   }
 
-  .reading__cards {
-    margin-top: 16px;
+  .reading__text--top {
+    margin-bottom: 32px;
   }
 
+  .reading__text,
+  .reading__item {
+    font-size: 20px;
+  }
+
+  .reading__form-name {
+    gap: 8px;
+  }
+
+  .reading__form-label {
+    font-size: 16px;
+  }
+
+  .reading__list {
+    margin-bottom: 32px;
+  }
+
+  .reading__form-input {
+    font-size: 16px;
+  }
+
+  #gender.reading__form-input {
+    font-size: 16px;
+  }
   .reading__modal-inner {
     padding: 16px;
     border-radius: 16px;
@@ -257,6 +326,11 @@
     padding-left: 0;
     padding-right: 0;
   }
+
+  .reading__form-wrapper {
+    margin: 32px 0 48px;
+  }
+
 }
 
 @media (max-width: 320px) {
@@ -266,15 +340,6 @@
     padding-bottom: 12px;
   }
 
-  .reading__wrapper-form {
-    margin: 26px 0 34px;
-    padding: 20px 12px 28px;
-    gap: 18px;
-  }
-
-  .reading__wrapper-form .reading__form {
-    gap: 10px;
-  }
 
   .reading__form-input {
     font-size: 16px;
@@ -360,19 +425,18 @@
 }
 
 .reading__card-label {
-  font-size: 12px;
+  font-size: 20px;
   color: var(--text-body, #2f385e);
   margin-top: 6px;
   font-weight: 600;
 }
 
 .reading__card-name {
-  font-size: 13px;
+  font-size: 20px;
   color: var(--text-dark, #18214a);
   margin-top: 2px;
 }
 
-/* Скрываем подписи до получения расклада */
 .reading__card-label,
 .reading__card-name {
   opacity: 0;
@@ -434,6 +498,43 @@
   filter: none;
 }
 
+.reading__result {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.reading__title.is-visible {
+  animation: reading-fade-up 0.7s ease-out both;
+}
+
+.reading__text--top.is-visible {
+  animation: reading-fade-up 0.65s ease-out 0.08s both;
+}
+
+.reading__text--bottom.is-visible {
+  animation: reading-fade-up 0.65s ease-out 0.16s both;
+}
+
+.reading__list.is-visible {
+  animation: reading-fade-up 0.7s ease-out 0.24s both;
+}
+
+.reading__text:not(.reading__text--top):not(.reading__text--bottom).is-visible {
+  animation: reading-fade-up 0.7s ease-out 0.28s both;
+}
+
+.reading__form-wrapper.is-visible {
+  animation: reading-fade-up 0.75s ease-out 0.32s both;
+}
+
+.reading__cards.is-visible {
+  animation: reading-fade-up 0.75s ease-out 0.4s both;
+}
+
+.reading__result.is-visible {
+  animation: reading-fade-up 0.75s ease-out 0.48s both;
+}
+
 .reading__typewriter-cursor {
   display: inline-block;
   width: 2px;
@@ -448,7 +549,18 @@
   50% { opacity: 0; }
 }
 
-/* Модалка карты */
+@keyframes reading-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ������� ����� */
 .reading__modal {
   display: none;
   position: fixed;
@@ -496,6 +608,7 @@
   font-size: 14px;
   color: var(--text-body, #2f385e);
   line-height: 1.5;
+  white-space: pre-line;
 }
 
 .reading__modal-close {
@@ -515,4 +628,33 @@
 
 .reading__modal-close:hover {
   background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading__title,
+  .reading__text--top,
+  .reading__text--bottom,
+  .reading__text:not(.reading__text--top):not(.reading__text--bottom),
+  .reading__list,
+  .reading__form-wrapper,
+  .reading__cards,
+  .reading__result {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+
+@media (max-width: 375px) {
+
+
+  .reading__form {
+    padding: 34px 16px 48px;
+  }
+
+  .reading__form-wrapper {
+    padding: 0;
+    margin: 48px 0 32px;
+  }
 }

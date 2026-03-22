@@ -1,67 +1,72 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
-    font-family: var(--font-family-base)
+  scroll-behavior: smooth;
+  font-family: var(--font-family-base);
 }
 
 body {
-    overflow-x: hidden;
-    margin: 0;
-    color: var(--text-body);
-    background: var(--bg-soft);
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    font-size: 24px;
+  overflow-x: hidden;
+  margin: 0;
+  color: var(--text-body);
+  background: var(--bg-soft);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-size: 24px;
 }
 
-h1,h2,h3,h3 {
-    font-family: var(--font-family-accent);
-    font-size: 128px;
-    margin: 0;
+h1,
+h2,
+h3,
+h3 {
+  font-family: var(--font-family-accent);
+  font-size: 128px;
+  margin: 0;
 }
 
-p, a, li {
-    font-family: var(--font-family-base);
+p,
+a,
+li {
+  font-family: var(--font-family-base);
 }
 
 img {
-    display: block;
-    max-width: 100%;
+  display: block;
+  max-width: 100%;
 }
 
 button,
 input,
 textarea {
-    font: inherit;
+  font: inherit;
 }
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 p,
 ul {
-    margin: 0;
+  margin: 0;
 }
 
 ul {
-    padding: 0;
-    list-style: none;
+  padding: 0;
+  list-style: none;
 }
 
 h1,
 h2 {
-    margin: 0;
+  margin: 0;
 }
 
 section,
 footer {
-    position: relative;
-    scroll-margin-top: calc(var(--header-height) + 24px);
+  position: relative;
+  scroll-margin-top: calc(var(--header-height) + 24px);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

@@ -1,18 +1,19 @@
 .hero {
     position: relative;
     background: linear-gradient(180deg, #badaff 0%, rgba(255, 255, 255, 0) 100%);
-    padding: 25px 20px 36px;
+    padding: 25px 20px 112px;
     overflow: hidden;
 }
 
 .hero__wrapper {
-    margin-top: 5%;
     display: flex;
     justify-content: space-between;
     gap: 24px
 }
 
 .hero__left {
+    position: relative;
+    z-index: 3;
     margin-top: 200px;
     display: flex;
     flex-direction: column;
@@ -32,12 +33,20 @@
     font-weight: 300;
 }
 
+.hero__text {
+    font-weight: 300;
+    font-size: 36px;
+}
 
 .hero__wrapper-btn {
     position: relative;
     z-index: 3;
     display: flex;
     gap: 16px;
+}
+
+.hero__accent {
+    font-weight: 700;
 }
 
 
@@ -71,6 +80,9 @@
     max-width: 100%;
 }
 
+.hero__btn {
+    white-space: nowrap;
+}
 
 @media (max-width: 1440px) {
     .hero__img::before {
@@ -137,11 +149,26 @@
 
 }
 
+@media (max-width: 480px) {
+    .hero__wrapper-btn {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
 @media (max-width: 425px) {
+
+    .hero__wrapper-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
     .hero__wrapper {
         margin: 0;
     }
-    
+
     .hero__left {
         margin-top: 56px;
     }
@@ -158,6 +185,14 @@
     .hero__img::before {
         top: -100%;
         left: 0;
+    }
+
+    .hero__title {
+        font-size: 64px;
+    }
+
+    .hero__text {
+        font-size: 20px;
     }
 
 }

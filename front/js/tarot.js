@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3002';
+import { API_BASE_URL } from './api-config.js';
 const POSITIONS = ['Прошлое', 'Настоящее', 'Будущее'];
 const PLACEHOLDER_SRCS = ['assets/img/card1.png', 'assets/img/card2.png', 'assets/img/card3.png'];
 
@@ -260,7 +260,7 @@ const initTarot = () => {
     }
 
     try {
-      const res = await fetch(`${API_URL}/api/reading`, {
+      const res = await fetch(`${API_BASE_URL}/api/reading`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, birthDate, gender }),
